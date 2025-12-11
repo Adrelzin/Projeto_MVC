@@ -56,34 +56,48 @@
             margin: 0;
             font-weight: bold;
         }
-        
-        .btn-primary-custom {
-            background-color: var(--color-primary);
-            border: none;
-            color: white;
-        }
-        
-        .btn-primary-custom:hover {
-            background-color: #a01410;
-            color: white;
-        }
-        
-        .table-container {
+
+        .pedido-card {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .pedido-header {
+            background-color: var(--color-secondary);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .pedido-header h4 {
+            color: var(--color-primary);
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .pedido-info {
+            color: var(--color-primary);
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+        
+        .table-container {
+            margin-top: 10px;
         }
         
         .table thead {
-            background-color: var(--color-secondary);
+            background-color: var(--color-light);
             color: var(--color-primary);
         }
         
         .table thead th {
             border: none;
             font-weight: 600;
-            padding: 15px;
+            padding: 12px;
+            font-size: 0.9rem;
         }
         
         .table tbody tr {
@@ -93,35 +107,31 @@
         .table tbody tr:hover {
             background-color: var(--color-bg);
         }
-        
-        .btn-edit {
-            background-color: var(--color-accent);
+
+        .table tbody td {
+            padding: 10px 12px;
+        }
+
+        .total-pedido {
+            text-align: right;
+            padding: 15px;
+            background-color: var(--color-bg);
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .total-pedido strong {
             color: var(--color-primary);
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
         }
-        
-        .btn-edit:hover {
-            background-color: #fdd490;
-            color: var(--color-primary);
-        }
-        
-        .btn-delete {
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .btn-delete:hover {
-            background-color: #a01410;
-            color: white;
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -134,40 +144,49 @@
     </nav>
 
     <div class="container">
-        <div class="page-header d-flex justify-content-between align-items-center">
-            <h2>Gerenciamento de Itens de Pedido</h2>
-            <a href="/Itens-Pedido/novo" class="btn btn-primary-custom">Novo Item</a>
+        <div class="page-header">
+            <h2>Itens de Pedido</h2>
         </div>
 
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Preço Unitário</th>
-                        <th>Subtotal</th>
-                        <th>Pedido</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="itemPedido : ${itensPedido}">
-                        <td th:text="${itemPedido.id}"></td>
-                        <td th:text="${itemPedido.produto != null ? itemPedido.produto.nome : 'N/A'}"></td>
-                        <td th:text="${itemPedido.quantidade}"></td>
-                        <td th:text="${'R$ ' + #numbers.formatDecimal(itemPedido.precoUnitario, 1, 2)}"></td>
-                        <td th:text="${'R$ ' + #numbers.formatDecimal(itemPedido.quantidade * itemPedido.precoUnitario, 1, 2)}"></td>
-                        <td th:text="${itemPedido.pedido != null ? itemPedido.pedido.id : 'N/A'}"></td>
-                        <td>
-                            <a th:href="@{/Itens-Pedido/editar/{id}(id=${itemPedido.id})}" class="btn-edit">Editar</a>
-                            <a th:href="@{/Itens-Pedido/deletar/{id}(id=${itemPedido.id})}" class="btn-delete" 
-                               onclick="return confirm('Tem certeza que deseja deletar este item?')">Deletar</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div th:if="${#lists.isEmpty(pedidosComItens)}" class="empty-message">
+            <p>Nenhum pedido com itens cadastrado</p>
+        </div>
+
+        <div th:each="pedido : ${pedidosComItens}" class="pedido-card">
+            <div class="pedido-header">
+                <h4>Pedido #<span th:text="${pedido.id}"></span></h4>
+                <div class="pedido-info">
+                    <strong>Cliente:</strong> <span th:text="${pedido.cliente != null ? pedido.cliente.nome : 'N/A'}"></span> | 
+                    <strong>Data:</strong> <span th:text="${#temporals.format(pedido.data, 'dd/MM/yyyy HH:mm')}"></span> | 
+                    <strong>Status:</strong> <span th:text="${pedido.status}"></span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unit.</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${pedido.itens}">
+                            <td th:text="${item.produto != null ? item.produto.nome : 'N/A'}"></td>
+                            <td th:text="${item.quantidade}"></td>
+                            <td th:text="${item.precoUnitario != null ? 'R$ ' + #numbers.formatDecimal(item.precoUnitario, 1, 2) : 'R$ 0,00'}"></td>
+                            <td th:text="${item.precoUnitario != null ? 'R$ ' + #numbers.formatDecimal(item.quantidade * item.precoUnitario, 1, 2) : 'R$ 0,00'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-pedido">
+                <strong>Total do Pedido: </strong>
+                <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}"></span>
+            </div>
         </div>
     </div>
 
