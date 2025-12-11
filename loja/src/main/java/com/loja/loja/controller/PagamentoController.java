@@ -1,40 +1,40 @@
 package com.loja.loja.controller;
 
-import com.loja.loja.model.Pagamento;
-import com.loja.loja.repository.PagamentoRepository;
+import com.loja.loja.model.Pedido;
+import com.loja.loja.repository.PedidoRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/pagamentos")
-public class PagamentoController {
+@RequestMapping("/pedidos")
+public class PedidoController {
 
-    private final PagamentoRepository repository;
+    private final PedidoRepository repository;
 
-    public PagamentoController(PagamentoRepository repository) {
+    public PedidoController(PedidoRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping
-    public List<Pagamento> listar() {
+    public List<Pedido> listar() {
         return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Pagamento buscarPorId(@PathVariable Long id) {
+    public Pedido buscarPorId(@PathVariable Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @PostMapping
-    public Pagamento criar(@RequestBody Pagamento pagamento) {
-        return repository.save(pagamento);
+    public Pedido criar(@RequestBody Pedido pedido) {
+        return repository.save(pedido);
     }
 
     @PutMapping("/{id}")
-    public Pagamento atualizar(@PathVariable Long id, @RequestBody Pagamento pagamento) {
-        pagamento.setId(id);
-        return repository.save(pagamento);
+    public Pedido atualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
+        pedido.setId(id);
+        return repository.save(pedido);
     }
 
     @DeleteMapping("/{id}")
