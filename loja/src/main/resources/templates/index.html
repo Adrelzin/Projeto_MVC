@@ -1,21 +1,188 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lista de Clientes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Loja</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #810e0b;
+            --color-secondary: #e8de92;
+            --color-accent: #febea3;
+            --color-light: #fce5b1;
+            --color-bg: #f6f5da;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--color-primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            color: var(--color-bg) !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #a01410 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            background-color: white;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 15px 20px;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn-custom {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-custom:hover {
+            background-color: #a01410;
+            color: white;
+        }
+        
+        .module-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Clientes</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-        </tr>
-        <tr th:each="cliente : ${clientes}">
-            <td th:text="${cliente.id}"></td>
-            <td th:text="${cliente.nome}"></td>
-            <td th:text="${cliente.email}"></td>
-        </tr>
-    </table>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Sistema de Loja</a>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1>Bem-vindo ao Sistema de Gerenciamento</h1>
+            <p class="lead">Gerencie todos os aspectos da sua loja em um só lugar</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Clientes
+                    </div>
+                    <div class="card-body">
+                        <p class="module-description">Gerencie o cadastro de clientes</p>
+                        <a href="/Clientes" class="btn btn-custom">Acessar Clientes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Produtos
+                    </div>
+                    <div class="card-body">
+                        <p class="module-description">Cadastre e controle seus produtos</p>
+                        <a href="/Produtos" class="btn btn-custom">Acessar Produtos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Categorias
+                    </div>
+                    <div class="card-body">
+                        <p class="module-description">Organize produtos por categorias</p>
+                        <a href="/Categorias" class="btn btn-custom">Acessar Categorias</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Pedidos
+                    </div>
+                    <div class="card-body">
+                        <p class="module-description">Gerencie os pedidos realizados</p>
+                        <a href="/Pedidos" class="btn btn-custom">Acessar Pedidos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Pagamentos
+                    </div>
+                    <div class="card-body">
+                        <p class="module-description">Controle de pagamentos recebidos</p>
+                        <a href="/Pagamentos" class="btn btn-custom">Acessar Pagamentos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Itens de Pedido
+                    </div>
+                    <div class="card-body">
+                        <p class="module-description">Visualize itens dos pedidos</p>
+                        <a href="/Itens-Pedido" class="btn btn-custom">Acessar Itens</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
