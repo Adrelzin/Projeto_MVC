@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Pedidos")
@@ -33,8 +34,37 @@ public class PedidoViewController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("pedidos", pedidoRepository.findAll());
+    public String listar(@RequestParam(required = false) Long clienteId,
+                        @RequestParam(required = false) String status,
+                        Model model) {
+        List<Pedido> pedidos;
+        
+        if ((clienteId != null && clienteId > 0) || (status != null && !status.trim().isEmpty())) {
+            pedidos = pedidoRepository.findAll().stream()
+                .filter(p -> {
+                    boolean matchCliente = true;
+                    boolean matchStatus = true;
+                    
+                    if (clienteId != null && clienteId > 0) {
+                        matchCliente = p.getCliente() != null && 
+                                     p.getCliente().getId().equals(clienteId);
+                    }
+                    
+                    if (status != null && !status.trim().isEmpty()) {
+                        matchStatus = p.getStatus().equals(status);
+                    }
+                    
+                    return matchCliente && matchStatus;
+                })
+                .collect(Collectors.toList());
+        } else {
+            pedidos = pedidoRepository.findAll();
+        }
+        
+        model.addAttribute("pedidos", pedidos);
+        model.addAttribute("clientes", clienteRepository.findAll());
+        model.addAttribute("clienteId", clienteId);
+        model.addAttribute("status", status);
         return "Pedidos";
     }
 
