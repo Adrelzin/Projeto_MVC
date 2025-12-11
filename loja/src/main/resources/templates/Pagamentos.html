@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamentos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #810e0b;
+            --color-secondary: #e8de92;
+            --color-accent: #febea3;
+            --color-light: #fce5b1;
+            --color-bg: #f6f5da;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--color-primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .navbar-brand {
+            color: var(--color-bg) !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .btn-home {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            border: none;
+            font-weight: 500;
+        }
+        
+        .btn-home:hover {
+            background-color: var(--color-light);
+            color: var(--color-primary);
+        }
+        
+        .page-header {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .page-header h2 {
+            color: var(--color-primary);
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--color-primary);
+            border: none;
+            color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #a01410;
+            color: white;
+        }
+        
+        .table-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table thead {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+        }
+        
+        .table thead th {
+            border: none;
+            font-weight: 600;
+            padding: 15px;
+        }
+        
+        .table tbody tr {
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--color-bg);
+        }
+        
+        .btn-edit {
+            background-color: var(--color-accent);
+            color: var(--color-primary);
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-edit:hover {
+            background-color: #fdd490;
+            color: var(--color-primary);
+        }
+        
+        .btn-delete {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-delete:hover {
+            background-color: #a01410;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Sistema de Loja</a>
+            <a href="/" class="btn btn-home">Voltar ao Início</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h2>Gerenciamento de Pagamentos</h2>
+            <a href="/Pagamentos/novo" class="btn btn-primary-custom">Novo Pagamento</a>
+        </div>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                        <th>Pedido</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pagamento : ${pagamentos}">
+                        <td th:text="${pagamento.id}"></td>
+                        <td th:text="${pagamento.tipo}"></td>
+                        <td th:text="${pagamento.status}"></td>
+                        <td th:text="${pagamento.pedido != null ? pagamento.pedido.id : 'N/A'}"></td>
+                        <td>
+                            <a th:href="@{/Pagamentos/editar/{id}(id=${pagamento.id})}" class="btn-edit">Editar</a>
+                            <a th:href="@{/Pagamentos/deletar/{id}(id=${pagamento.id})}" class="btn-delete" 
+                               onclick="return confirm('Tem certeza que deseja deletar este pagamento?')">Deletar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

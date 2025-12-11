@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Item de Pedido</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #810e0b;
+            --color-secondary: #e8de92;
+            --color-accent: #febea3;
+            --color-light: #fce5b1;
+            --color-bg: #f6f5da;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--color-primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .navbar-brand {
+            color: var(--color-bg) !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .btn-home {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            border: none;
+            font-weight: 500;
+        }
+        
+        .btn-home:hover {
+            background-color: var(--color-light);
+            color: var(--color-primary);
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-container h2 {
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .form-label {
+            color: var(--color-primary);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            border: 2px solid var(--color-light);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 0.2rem rgba(232, 222, 146, 0.25);
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--color-primary);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #a01410;
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background-color: var(--color-accent);
+            border: none;
+            color: var(--color-primary);
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary-custom:hover {
+            background-color: #fdd490;
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Sistema de Loja</a>
+            <a href="/Itens-Pedido" class="btn btn-home">Voltar para Itens</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2 th:text="${itemPedido.id != null ? 'Editar Item' : 'Novo Item'}"></h2>
+            
+            <form th:action="@{/Itens-Pedido/salvar}" th:object="${itemPedido}" method="post">
+                <input type="hidden" th:field="*{id}">
+                
+                <div class="mb-3">
+                    <label for="quantidade" class="form-label">Quantidade</label>
+                    <input type="number" class="form-control" id="quantidade" th:field="*{quantidade}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="precoUnitario" class="form-label">Preço Unitário</label>
+                    <input type="number" step="0.01" class="form-control" id="precoUnitario" th:field="*{precoUnitario}" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom">Salvar</button>
+                <a href="/Itens-Pedido" class="btn btn-secondary-custom">Cancelar</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
