@@ -68,6 +68,45 @@
             color: white;
         }
         
+        .search-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            border: 2px solid var(--color-light);
+            border-radius: 6px;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 0.2rem rgba(232, 222, 146, 0.25);
+        }
+        
+        .search-box button {
+            background-color: var(--color-primary);
+            border: none;
+            color: white;
+        }
+        
+        .search-box button:hover {
+            background-color: #a01410;
+        }
+        
+        .btn-clear {
+            background-color: var(--color-accent);
+            border: none;
+            color: var(--color-primary);
+        }
+        
+        .btn-clear:hover {
+            background-color: #fdd490;
+            color: var(--color-primary);
+        }
+        
         .table-container {
             background-color: white;
             padding: 20px;
@@ -137,6 +176,24 @@
         <div class="page-header d-flex justify-content-between align-items-center">
             <h2>Gerenciamento de Clientes</h2>
             <a href="/Clientes/novo" class="btn btn-primary-custom">Novo Cliente</a>
+        </div>
+
+        <div class="search-box">
+            <form method="get" action="/Clientes">
+                <div class="row">
+                    <div class="col-md-9">
+                        <input type="text" 
+                               class="form-control" 
+                               name="busca" 
+                               placeholder="Buscar por nome, email ou telefone..."
+                               th:value="${busca}">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                        <a href="/Clientes" class="btn btn-clear w-100 mt-2">Limpar</a>
+                    </div>
+                </div>
+            </form>
         </div>
 
         <div class="table-container">
