@@ -68,6 +68,45 @@
             color: white;
         }
         
+        .search-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .search-box select {
+            border: 2px solid var(--color-light);
+            border-radius: 6px;
+        }
+        
+        .search-box select:focus {
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 0.2rem rgba(232, 222, 146, 0.25);
+        }
+        
+        .search-box button {
+            background-color: var(--color-primary);
+            border: none;
+            color: white;
+        }
+        
+        .search-box button:hover {
+            background-color: #a01410;
+        }
+        
+        .btn-clear {
+            background-color: var(--color-accent);
+            border: none;
+            color: var(--color-primary);
+        }
+        
+        .btn-clear:hover {
+            background-color: #fdd490;
+            color: var(--color-primary);
+        }
+        
         .table-container {
             background-color: white;
             padding: 20px;
@@ -137,6 +176,37 @@
         <div class="page-header d-flex justify-content-between align-items-center">
             <h2>Gerenciamento de Pedidos</h2>
             <a href="/Pedidos/novo" class="btn btn-primary-custom">Novo Pedido</a>
+        </div>
+
+        <div class="search-box">
+            <form method="get" action="/Pedidos">
+                <div class="row">
+                    <div class="col-md-5">
+                        <select class="form-select" name="clienteId">
+                            <option value="">Todos os clientes</option>
+                            <option th:each="cliente : ${clientes}" 
+                                    th:value="${cliente.id}" 
+                                    th:text="${cliente.nome}"
+                                    th:selected="${clienteId != null && clienteId == cliente.id}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" name="status">
+                            <option value="">Todos os status</option>
+                            <option value="PENDENTE" th:selected="${status == 'PENDENTE'}">Pendente</option>
+                            <option value="PROCESSANDO" th:selected="${status == 'PROCESSANDO'}">Processando</option>
+                            <option value="ENVIADO" th:selected="${status == 'ENVIADO'}">Enviado</option>
+                            <option value="ENTREGUE" th:selected="${status == 'ENTREGUE'}">Entregue</option>
+                            <option value="CANCELADO" th:selected="${status == 'CANCELADO'}">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                        <a href="/Pedidos" class="btn btn-clear w-100 mt-2">Limpar</a>
+                    </div>
+                </div>
+            </form>
         </div>
 
         <div class="table-container">
