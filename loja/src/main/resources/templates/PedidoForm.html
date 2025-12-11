@@ -48,7 +48,7 @@
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
         }
         
@@ -107,6 +107,71 @@
             background-color: #fdd490;
             color: var(--color-primary);
         }
+
+        .produtos-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--color-bg);
+            border-radius: 6px;
+        }
+
+        .produtos-section h5 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .produto-item {
+            background-color: white;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border: 2px solid var(--color-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .produto-info {
+            flex: 1;
+        }
+
+        .produto-nome {
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 0.95rem;
+        }
+
+        .produto-detalhes {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .quantidade-input {
+            width: 80px;
+        }
+
+        .valor-total-box {
+            background-color: var(--color-secondary);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .valor-total-box .label {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .valor-total-box .valor {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
     </style>
 </head>
 <body>
@@ -121,29 +186,81 @@
         <div class="form-container">
             <h2 th:text="${pedido.id != null ? 'Editar Pedido' : 'Novo Pedido'}"></h2>
             
-            <form th:action="@{/Pedidos/salvar}" th:object="${pedido}" method="post">
-                <input type="hidden" th:field="*{id}">
+            <form th:action="${pedido.id != null ? '/Pedidos/atualizar/' + pedido.id : '/Pedidos/salvar'}" method="post">
                 
                 <div class="mb-3">
-                    <label for="data" class="form-label">Data e Hora</label>
-                    <input type="datetime-local" class="form-control" id="data" th:field="*{data}" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" th:field="*{status}" required>
-                        <option value="">Selecione</option>
-                        <option value="PENDENTE">Pendente</option>
-                        <option value="PROCESSANDO">Processando</option>
-                        <option value="ENVIADO">Enviado</option>
-                        <option value="ENTREGUE">Entregue</option>
-                        <option value="CANCELADO">Cancelado</option>
+                    <label for="clienteId" class="form-label">Cliente</label>
+                    <select class="form-select" id="clienteId" name="clienteId" required>
+                        <option value="">Selecione um cliente</option>
+                        <option th:each="cliente : ${clientes}" 
+                                th:value="${cliente.id}" 
+                                th:text="${cliente.nome}"
+                                th:selected="${pedido.cliente != null && pedido.cliente.id == cliente.id}">
+                        </option>
                     </select>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="valorTotal" class="form-label">Valor Total</label>
-                    <input type="number" step="0.01" class="form-control" id="valorTotal" th:field="*{valorTotal}" required>
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="PENDENTE" th:selected="${pedido.status == 'PENDENTE'}">Pendente</option>
+                        <option value="PROCESSANDO" th:selected="${pedido.status == 'PROCESSANDO'}">Processando</option>
+                        <option value="ENVIADO" th:selected="${pedido.status == 'ENVIADO'}">Enviado</option>
+                        <option value="ENTREGUE" th:selected="${pedido.status == 'ENTREGUE'}">Entregue</option>
+                        <option value="CANCELADO" th:selected="${pedido.status == 'CANCELADO'}">Cancelado</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="tipoPagamento" class="form-label">Tipo de Pagamento</label>
+                    <select class="form-select" id="tipoPagamento" name="tipoPagamento" required>
+                        <option value="">Selecione</option>
+                        <option value="DINHEIRO" th:selected="${pedido.pagamento != null && pedido.pagamento.tipo == 'DINHEIRO'}">Dinheiro</option>
+                        <option value="CARTAO_CREDITO" th:selected="${pedido.pagamento != null && pedido.pagamento.tipo == 'CARTAO_CREDITO'}">Cartão de Crédito</option>
+                        <option value="CARTAO_DEBITO" th:selected="${pedido.pagamento != null && pedido.pagamento.tipo == 'CARTAO_DEBITO'}">Cartão de Débito</option>
+                        <option value="PIX" th:selected="${pedido.pagamento != null && pedido.pagamento.tipo == 'PIX'}">PIX</option>
+                        <option value="BOLETO" th:selected="${pedido.pagamento != null && pedido.pagamento.tipo == 'BOLETO'}">Boleto</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="statusPagamento" class="form-label">Status do Pagamento</label>
+                    <select class="form-select" id="statusPagamento" name="statusPagamento" required>
+                        <option value="PENDENTE" th:selected="${pedido.pagamento == null || pedido.pagamento.status == 'PENDENTE'}">Pendente</option>
+                        <option value="APROVADO" th:selected="${pedido.pagamento != null && pedido.pagamento.status == 'APROVADO'}">Aprovado</option>
+                        <option value="RECUSADO" th:selected="${pedido.pagamento != null && pedido.pagamento.status == 'RECUSADO'}">Recusado</option>
+                        <option value="ESTORNADO" th:selected="${pedido.pagamento != null && pedido.pagamento.status == 'ESTORNADO'}">Estornado</option>
+                    </select>
+                </div>
+
+                <div class="produtos-section">
+                    <h5>Produtos</h5>
+                    
+                    <div th:each="produto : ${produtos}" class="produto-item">
+                        <div class="produto-info">
+                            <div class="produto-nome" th:text="${produto.nome}"></div>
+                            <div class="produto-detalhes">
+                                <span th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}"></span> - 
+                                <span th:text="'Estoque: ' + ${produto.estoque}"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="hidden" name="produtoIds" th:value="${produto.id}">
+                            <input type="number" 
+                                   name="quantidades" 
+                                   class="form-control quantidade-input" 
+                                   min="0" 
+                                   th:max="${produto.estoque}"
+                                   value="0"
+                                   th:data-preco="${produto.preco}"
+                                   onchange="calcularTotal()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="valor-total-box">
+                    <div class="label">Valor Total</div>
+                    <div class="valor" id="valorTotal">R$ 0,00</div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary-custom">Salvar</button>
@@ -151,6 +268,22 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function calcularTotal() {
+            const quantidadeInputs = document.getElementsByName('quantidades');
+            let total = 0;
+
+            quantidadeInputs.forEach(function(input) {
+                const quantidade = parseInt(input.value) || 0;
+                const preco = parseFloat(input.getAttribute('data-preco')) || 0;
+                total += quantidade * preco;
+            });
+
+            document.getElementById('valorTotal').textContent = 
+                'R$ ' + total.toFixed(2).replace('.', ',');
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
