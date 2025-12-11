@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/Produtos")
 public class ProdutoViewController {
@@ -20,8 +23,37 @@ public class ProdutoViewController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("produtos", repository.findAll());
+    public String listar(@RequestParam(required = false) String busca,
+                        @RequestParam(required = false) Long categoriaId,
+                        Model model) {
+        List<Produto> produtos;
+        
+        if ((busca != null && !busca.trim().isEmpty()) || (categoriaId != null && categoriaId > 0)) {
+            produtos = repository.findAll().stream()
+                .filter(p -> {
+                    boolean matchBusca = true;
+                    boolean matchCategoria = true;
+                    
+                    if (busca != null && !busca.trim().isEmpty()) {
+                        matchBusca = p.getNome().toLowerCase().contains(busca.toLowerCase());
+                    }
+                    
+                    if (categoriaId != null && categoriaId > 0) {
+                        matchCategoria = p.getCategoria() != null && 
+                                       p.getCategoria().getId().equals(categoriaId);
+                    }
+                    
+                    return matchBusca && matchCategoria;
+                })
+                .collect(Collectors.toList());
+        } else {
+            produtos = repository.findAll();
+        }
+        
+        model.addAttribute("produtos", produtos);
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        model.addAttribute("busca", busca);
+        model.addAttribute("categoriaId", categoriaId);
         return "Produtos";
     }
 
