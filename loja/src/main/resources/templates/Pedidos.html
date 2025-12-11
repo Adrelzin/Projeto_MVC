@@ -145,9 +145,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Data</th>
+                        <th>Cliente</th>
                         <th>Status</th>
                         <th>Valor Total</th>
-                        <th>Cliente</th>
+                        <th>Pagamento</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -155,9 +156,16 @@
                     <tr th:each="pedido : ${pedidos}">
                         <td th:text="${pedido.id}"></td>
                         <td th:text="${#temporals.format(pedido.data, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${pedido.cliente != null ? pedido.cliente.nome : 'N/A'}"></td>
                         <td th:text="${pedido.status}"></td>
                         <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}"></td>
-                        <td th:text="${pedido.cliente != null ? pedido.cliente.nome : 'N/A'}"></td>
+                        <td>
+                            <div th:if="${pedido.pagamento != null}">
+                                <div th:text="${pedido.pagamento.tipo}"></div>
+                                <small th:text="${pedido.pagamento.status}" style="color: #666;"></small>
+                            </div>
+                            <span th:if="${pedido.pagamento == null}">N/A</span>
+                        </td>
                         <td>
                             <a th:href="@{/Pedidos/editar/{id}(id=${pedido.id})}" class="btn-edit">Editar</a>
                             <a th:href="@{/Pedidos/deletar/{id}(id=${pedido.id})}" class="btn-delete" 
