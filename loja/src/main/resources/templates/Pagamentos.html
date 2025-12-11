@@ -57,17 +57,6 @@
             font-weight: bold;
         }
         
-        .btn-primary-custom {
-            background-color: var(--color-primary);
-            border: none;
-            color: white;
-        }
-        
-        .btn-primary-custom:hover {
-            background-color: #a01410;
-            color: white;
-        }
-        
         .table-container {
             background-color: white;
             padding: 20px;
@@ -93,36 +82,6 @@
         .table tbody tr:hover {
             background-color: var(--color-bg);
         }
-        
-        .btn-edit {
-            background-color: var(--color-accent);
-            color: var(--color-primary);
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .btn-edit:hover {
-            background-color: #fdd490;
-            color: var(--color-primary);
-        }
-        
-        .btn-delete {
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .btn-delete:hover {
-            background-color: #a01410;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -134,9 +93,8 @@
     </nav>
 
     <div class="container">
-        <div class="page-header d-flex justify-content-between align-items-center">
+        <div class="page-header">
             <h2>Gerenciamento de Pagamentos</h2>
-            <a href="/Pagamentos/novo" class="btn btn-primary-custom">Novo Pagamento</a>
         </div>
 
         <div class="table-container">
@@ -144,23 +102,21 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Pedido</th>
+                        <th>Cliente</th>
                         <th>Tipo</th>
                         <th>Status</th>
-                        <th>Pedido</th>
-                        <th>Ações</th>
+                        <th>Valor</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="pagamento : ${pagamentos}">
                         <td th:text="${pagamento.id}"></td>
+                        <td th:text="${pagamento.pedido != null ? 'Pedido #' + pagamento.pedido.id : 'N/A'}"></td>
+                        <td th:text="${pagamento.pedido != null and pagamento.pedido.cliente != null ? pagamento.pedido.cliente.nome : 'N/A'}"></td>
                         <td th:text="${pagamento.tipo}"></td>
                         <td th:text="${pagamento.status}"></td>
-                        <td th:text="${pagamento.pedido != null ? pagamento.pedido.id : 'N/A'}"></td>
-                        <td>
-                            <a th:href="@{/Pagamentos/editar/{id}(id=${pagamento.id})}" class="btn-edit">Editar</a>
-                            <a th:href="@{/Pagamentos/deletar/{id}(id=${pagamento.id})}" class="btn-delete" 
-                               onclick="return confirm('Tem certeza que deseja deletar este pagamento?')">Deletar</a>
-                        </td>
+                        <td th:text="${pagamento.pedido != null ? 'R$ ' + #numbers.formatDecimal(pagamento.pedido.valorTotal, 1, 2) : 'R$ 0,00'}"></td>
                     </tr>
                 </tbody>
             </table>
