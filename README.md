@@ -75,4 +75,4 @@ Pedidos: Filtro por cliente e status do pedido
 ## Equipe
 Adryell William Gomes Nascimento
 Estéfanas Argentina Castanheira de Mesquita
-Querén Hapuque do Céu de Morais Ferreira
+Querén Hapuque do Céu Araújo de Morais Ferreira
